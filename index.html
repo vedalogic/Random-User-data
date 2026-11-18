@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Draw Winners</title>
+
+    <style>
+        /* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* Jumbotron Styling */
+.jumbotron {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+    border-radius: 8px;
+    margin: 30px auto;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.jumbotron h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+#user-result {
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+/* Button Styling */
+button {
+    padding: 15px 30px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #1e7e34;
+    transform: scale(0.98);
+}
+
+    </style>
+</head>
+<body>
+    <div class="jumbotron">
+        <h1>Lucky Draw Winners</h1>
+        <button onclick="fetchUser()">Get Winners</button>
+        <div id="user-result"></div>
+    </div>
+    <script>
+        async function fetchUser(){
+            let result = document.getElementById("user-result");
+            result.innerHTML = "<p>Loading Winner...</p>";
+
+            try{
+                // Fetching Data from API
+                const response = await fetch("https://randomuser.me/api/");
+
+                if(!reponse.ok){
+                    throw new Error("Failed to fetch data");
+                }
+
+                // Convert response to Json
+                const data = await response.json();
+
+                // Extract User Information
+                let user = data.results[0] 
+                let fullName = `${user.name.first} ${user.name.last}`;
+                let email = user.email;
+                let picture = user.picture.large;
+                
+                // display user detail
+                result.innerHTMl = `
+                <img alt="" src="${picture}"" style="height:250px; width:250px; border-radius:50%; margin: 15px 0;">
+                <h2>${fullName}</h2>
+                <p>Email: ${email}</p>
+                `
+                }
+            catch(error){
+                result.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`
+            }
+        }
+    </script>
+</body>
+</html>
